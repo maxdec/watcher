@@ -44,7 +44,7 @@ var t = new twitter({
   access_token_secret: config.access_token_secret
 });
 
-var search = 'lady gaga,coupure courant,coupure electricite';
+var search = 'coupure courant,coupure electricite';
 var tweets = [];
 t.stream('statuses/filter', { track: search}, function (stream) {
   stream.on('data', function (tweet) {
