@@ -6,7 +6,6 @@ socket.on('tweets', function (ts) {
   drawTweets(tweets);
 });
 socket.on('tweet', function (tweet) {
-  console.log(tweet);
   tweets = [tweet].concat(tweets).slice(0, 50);
   drawTweets(tweets);
 });
@@ -14,22 +13,6 @@ socket.on('tweet', function (tweet) {
 function drawTweets(tweets) {
   var html = '';
   tweets.forEach(function (tweet) {
-    // html += ''+
-    //   '<div class="row">\n'+
-    //     '<div id="tweets" class="col-md-6 col-md-offset-3">\n'+
-    //       '<div class="tweet">\n'+
-    //         '<div class="top">\n'+
-    //           '<a href="//twitter.com/'+tweet.user.screen_name+'/status/'+tweet.id_str+'" class="thumbnail pull-right" target="_blank">\n'+
-    //             '<img src="'+tweet.user.profile_image_url+'">\n'+
-    //           '</a>\n'+
-    //           '<h3>'+tweet.text+'</h3>\n'+
-    //         '</div>\n'+
-    //         '<a href="//twitter.com/'+tweet.user.screen_name+'" class="author" target="_blank">@'+tweet.user.screen_name+'</a>\n'+
-    //         '<a href="//twitter.com/'+tweet.user.screen_name+'/status/'+tweet.id_str+'" class="date" target="_blank">'+timeSince(new Date(tweet.created_at))+'</a>\n'+
-    //       '</div>\n'+
-    //     '</div>\n'+
-    //   '</div>';
-
     html += ''+
       '<div class="media tweet">\n'+
         '<a class="pull-right" href="//twitter.com/'+tweet.user.screen_name+'/status/'+tweet.id_str+'" target="_blank">\n'+
