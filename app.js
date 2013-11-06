@@ -44,7 +44,7 @@ var t = new twitter({
   access_token_secret: config.access_token_secret
 });
 
-var search = 'coupure courant,coupure electricite,coupure électricité';
+var search = 'coupure courant,coupure courrant,coupure electricite,coupure électricité';
 var tweets = [];
 t.stream('statuses/filter', { track: search}, function (stream) {
   stream.on('data', function (tweet) {
