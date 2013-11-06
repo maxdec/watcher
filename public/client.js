@@ -1,4 +1,4 @@
-var socket = io.connect('http://vagrant:3000/');
+var socket = io.connect('http://'+window.location.host);
 
 var tweets = [];
 socket.on('tweets', function (ts) {
