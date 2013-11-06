@@ -1,0 +1,21 @@
+.tweet {
+  margin-bottom: 20px;
+}
+
+.tweet .top {
+  width: 100%;
+  padding-bottom: 5px;
+  border-bottom: 2px solid #CCC;
+}
+
+.tweet .date {
+  color: #999;
+}
+
+.tweet .author {
+  color: #333;
+}
+
+.tweet .mapmarker {
+  color: #666;
+}
