@@ -13,5 +13,9 @@
     "socket.io": "*",
     "twit": "*",
     "config": "*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/maxdec/watcher.git"
   }
 }
