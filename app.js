@@ -2,6 +2,8 @@ var express = require('express');
 var config = require('config');
 var app = express();
 
+$MAX_TWEETS_NB = 50;
+
 app.configure(function (){
   app.use(express.bodyParser());
   app.use(express.static(__dirname + '/public'));
@@ -36,19 +38,49 @@ io.sockets.on('connection', function (socket) {
 /**
  * TWITTER
  */
-var twitter = require('ntwitter');
-var t = new twitter({
+var Twit = require('twit');
+var t = new Twit({
   consumer_key: config.consumer_key,
   consumer_secret: config.consumer_secret,
-  access_token_key: config.access_token_key,
+  access_token: config.access_token_key,
   access_token_secret: config.access_token_secret
 });
 
-var search = 'coupure courant,coupure courrant,coupure electricite,coupure électricité';
-var tweets = [];
-t.stream('statuses/filter', { track: search}, function (stream) {
-  stream.on('data', function (tweet) {
-    tweets = [tweet].concat(tweets).slice(0, 50);
-    io.sockets.emit('tweet', tweet);
- });
+var tweets;
+initSearch(function (statuses) {
+  tweets = statuses;
 });
+
+function initSearch(callback) {
+  var search = 'coupure+courant OR coupure+courrant OR coupure+electricite';
+  t.get('search/tweets', { q: search, result_type: 'recent', count: $MAX_TWEETS_NB }, function (err, reply) {
+    if (err) return console.log(err);
+
+    var statuses = [];
+    reply.statuses.forEach(function (status) {
+      statuses.push(formatTweet(status));
+    });
+
+    callback(statuses);
+  });
+}
+
+var track = 'coupure courant,coupure courrant,coupure lectricit';
+var stream = t.stream('statuses/filter', { track: track });
+stream.on('tweet', function (tweet) {
+  tweet = formatTweet(tweet);
+  tweets = [tweet].concat(tweets).slice(0, $MAX_TWEETS_NB);
+  io.sockets.emit('tweet', tweet);
+});
+
+function formatTweet(tweet) {
+  return {
+    id: tweet.id_str,
+    text: tweet.text,
+    created_at: tweet.created_at,
+    user_id: tweet.user.id_str,
+    user_name: tweet.user.screen_name,
+    user_img: tweet.user.profile_image_url,
+    coords: tweet.coordinates
+  };
+}

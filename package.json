@@ -11,7 +11,7 @@
   "dependencies": {
     "express": "3.x",
     "socket.io": "*",
-    "ntwitter": "*",
+    "twit": "*",
     "config": "*"
   }
 }
