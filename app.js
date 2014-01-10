@@ -1,10 +1,11 @@
+'use strict';
 var express = require('express');
 var config = require('config');
 var app = express();
 
-$MAX_TWEETS_NB = 50;
+var MAX_TWEETS_NB = 50;
 
-app.configure(function (){
+app.configure(function () {
   app.use(express.bodyParser());
   app.use(express.static(__dirname + '/public'));
   app.use(app.router);
@@ -14,7 +15,7 @@ app.configure(function (){
 /**
  * ROUTES
  */
-app.get('/', function (req, res){
+app.get('/', function (req, res) {
   res.send('Everything is fine.');
 });
 
@@ -52,8 +53,9 @@ initSearch(function (statuses) {
 });
 
 function initSearch(callback) {
-  var search = 'coupure+courant OR coupure+courrant OR coupure+electricite';
-  t.get('search/tweets', { q: search, result_type: 'recent', count: $MAX_TWEETS_NB }, function (err, reply) {
+  //var search = 'coupure+courant OR coupure+courrant OR coupure+electricite';
+  var search = 'lady gaga';
+  t.get('search/tweets', { q: search, result_type: 'recent', count: MAX_TWEETS_NB }, function (err, reply) {
     if (err) return console.log(err);
 
     var statuses = [];
@@ -65,15 +67,18 @@ function initSearch(callback) {
   });
 }
 
-var track = 'coupure courant,coupure courrant,coupure lectricit';
-var stream = t.stream('statuses/filter', { track: track });
-stream.on('tweet', function (tweet) {
-  tweet = formatTweet(tweet);
-  tweets = [tweet].concat(tweets).slice(0, $MAX_TWEETS_NB);
-  io.sockets.emit('tweet', tweet);
-});
+// var track = 'coupure courant,coupure courrant,coupure lectricit';
+// var stream = t.stream('statuses/filter', { track: track });
+// stream.on('tweet', function (tweet) {
+//   tweet = formatTweet(tweet);
+//   tweets = [tweet].concat(tweets).slice(0, MAX_TWEETS_NB);
+//   io.sockets.emit('tweet', tweet);
+// });
 
 function formatTweet(tweet) {
+  if (tweet.entities.media) {
+    console.log(tweet.entities.media[0].sizes);
+  }
   return {
     id: tweet.id_str,
     text: tweet.text,
